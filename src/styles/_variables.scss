@@ -1,0 +1,16 @@
+$primary-color: #f2a66e;
+$secondary-color: #6c757d;
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $primary-color;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $primary-color;
+}

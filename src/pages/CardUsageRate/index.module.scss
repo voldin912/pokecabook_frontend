@@ -1,0 +1,53 @@
+@import '../../styles/breakpoints';
+
+.wrapper {
+    // your CardUsageRate specific styles
+    background-color: rgb(184, 184, 230);
+    padding: 1rem;
+    font-size: 16px;
+    
+    // Mobile styles (default)
+    display: flex;
+    flex-direction: column;
+    
+    // Tablet and above
+    @include respond-below('tablet') {
+        background-color: green;
+        padding: 2rem;
+        font-size: 18px;
+        flex-direction: row;
+    }
+    
+    // Desktop only
+    // @include respond-above('desktop') {
+    //     background-color: yellow;
+    //     padding: 3rem;
+    //     max-width: 1200px;
+    //     margin: 0 auto;
+    // }
+    
+    // Mobile only
+    // @include respond-below('tablet') {
+    //     margin: 0 1rem;
+    //     background-color: red;
+    // }
+    
+    // Only tablet range
+    // @include respond-between('tablet', 'laptop') {
+    //     margin: 0 2rem;
+    //     background-color: blue;
+    // }
+}
+
+// Example with a card component
+.card {
+    width: 100%;
+    background-color: green;
+    @include respond-above('tablet') {
+        width: 50%;
+    }
+    
+    @include respond-above('laptop') {
+        width: 33.333%;
+    }
+}
