@@ -24,14 +24,11 @@ const LayoutSide = () => {
 
   useEffect(() => {
     setResponsive(!screens.md);
+    if (!screens.md) setCollapsed(true);
   }, [screens.md]);
-
-  useEffect(() => {
-    if (!screens.md) setCollapsed(true)
-  }, [screens.md])
   return (
     <Layout>
-      <Header
+      <div
         style={{
           background: colorBgContainer,
         }}
@@ -46,14 +43,27 @@ const LayoutSide = () => {
         
         <div className={`${responsive ? styles.logoContainer : styles.logoContainerAlone}`}>
           <UnorderedListOutlined onClick={() => setSidebarPresentStatus(!sidebarPresentStatus)}/>
+
+          {/* <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setSidebarPresentStatus(!sidebarPresentStatus)}
+              style={{
+                fontSize: '16px',
+                width: 64,
+                height: 64,
+              }}
+              className={`${responsive ? styles.none : styles.show}`}
+            /> */}
         </div>
-      </Header>
+      </div>
+
       <Layout
        style={{
         height: '100%',
         marginTop: '64px',
         }}>  
-        <Sider trigger={null} collapsible collapsed={collapsed} className={`${styles.leftSiderWrapper} ${sidebarPresentStatus ? styles.leftSidebarNone:styles.leftSidebarShow}`}>
+        <Sider trigger={null} collapsible collapsed={collapsed} className={`${styles.leftSiderWrapper} ${sidebarPresentStatus ? styles.leftSidebarNone : styles.leftSidebarShow}`}>
           <Menu
             theme="dark"
             mode="inline"
