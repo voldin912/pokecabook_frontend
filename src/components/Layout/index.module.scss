@@ -1,22 +1,11 @@
 @import '../../styles/breakpoints';
 @import '../../styles/variables';
 
-.siderWrapper {
-  padding-top: 28px;
-}
 
-.none {
-  display: none;
-}
-
-.show {
-  display: block;
-}
 
 .header {
   padding: 0;
   margin: 0;
-  // background-color: #be2424;
   position: fixed;
   max-width: 1440px;
   margin: 0 auto;
@@ -80,5 +69,26 @@
       }
     }
   }
-  
+}
+
+.leftSiderWrapper {
+  padding-top: 28px;
+  position: relative;
+}
+
+.leftSidebarNone {
+  left: -80px;
+}
+
+.leftSidebarShow {
+  left: 0px;
+  transition:all 300ms linear;
+}
+
+.none {
+  display: none;
+}
+
+.show {
+  display: block;
 }
