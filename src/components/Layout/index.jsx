@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   MenuFoldOutlined,
-  MenuUnfoldOutlined,
+  MenuUnfoldOutlined
 } from '@ant-design/icons';
-import { Outlet } from "react-router-dom";
-import { CgPokemon, CgCalendar,  } from "react-icons/cg";
+import { Outlet, NavLink } from "react-router-dom";
+import { CgPokemon, CgCalendar } from "react-icons/cg";
+import { LiaSearchSolid } from "react-icons/lia";
 import { BsBuilding } from "react-icons/bs";
 import { Layout, Menu, theme, Grid, Button } from 'antd';
 import { UnorderedListOutlined } from '@ant-design/icons';
 import styles from './index.module.scss';
-const { Header, Sider, Content } = Layout;
+import { setOpen, selectOpen } from '../../store/slices/pokemonSlice';
 
+const { Header, Sider, Content } = Layout;
 const { useBreakpoint } = Grid;
 
-const LayoutSide = () => {
+const LayoutSide = ({modalContent}) => {
+
+  const dispatch = useDispatch();
   const screens = useBreakpoint();
   const [responsive, setResponsive] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [sidebarPresentStatus, setSidebarPresentStatus] = useState(false);
+  const openStatus = useSelector(selectOpen);
+  
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -26,6 +33,12 @@ const LayoutSide = () => {
     setResponsive(!screens.md);
     if (!screens.md) setCollapsed(true);
   }, [screens.md]);
+
+  const changeModalStatus = () => {
+    console.log("changeModalStatus is called==>", openStatus);
+    dispatch(setOpen(!openStatus));
+  }
+
   return (
     <Layout>
       <div
@@ -36,25 +49,17 @@ const LayoutSide = () => {
       >
         <div className={`${responsive ? styles.logoContainerAlone : styles.logoContainer}`}>
           <img className={styles.logoImage} src="./assets/images/pokemon.png" alt="pokemon.png" />
-          <span className={`${styles.logoText}`}>
+          <span className={`${styles.logoText} bg-red-100`}>
             Pokemon
           </span>
         </div>
         
-        <div className={`${responsive ? styles.logoContainer : styles.logoContainerAlone}`}>
-          <UnorderedListOutlined onClick={() => setSidebarPresentStatus(!sidebarPresentStatus)}/>
+        <div className={`${responsive ? styles.logoContainer : styles.logoContainerAlone}`} style={{width: '50px', height:'50px'}}>
+          <UnorderedListOutlined onClick={() => setSidebarPresentStatus(!sidebarPresentStatus)}  style={{width: '100%', height:'100%'}}/>
+        </div>
 
-          {/* <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setSidebarPresentStatus(!sidebarPresentStatus)}
-              style={{
-                fontSize: '16px',
-                width: 64,
-                height: 64,
-              }}
-              className={`${responsive ? styles.none : styles.show}`}
-            /> */}
+        <div style={{marginRight: '10px', width: '30px', height:'30px'}} onClick={changeModalStatus} className='bg-red-300'>
+          <LiaSearchSolid style={{width: '100%', height:'100%'}}/>
         </div>
       </div>
 
@@ -72,24 +77,21 @@ const LayoutSide = () => {
               {
                 key: '1',
                 icon: <CgPokemon />,
-                label: 'カード採用率',
+                label: <NavLink to="/">カード採用率</NavLink>,
               },
               {
                 key: '2',
                 icon: <BsBuilding />,
-                label: 'シティ結果(会場別)',
+                label: <NavLink to="/dateshow">シティ結果(会場別)</NavLink>,
               },
               {
                 key: '3',
                 icon: <CgCalendar />,
-                label: 'シティ結果(日別)',
+                label: <NavLink to="/placeshow">シティ結果(日別)</NavLink>,
               },
             ]}
             className={`${styles.menuTag}`}
           />
-          <div className='tag'>
-
-          </div>
         </Sider>
         <Layout>
           <Header style={{ padding: 0, background: colorBgContainer }}>
@@ -118,6 +120,26 @@ const LayoutSide = () => {
           </Content>
         </Layout>
       </Layout>
+      
+      {/* <Modal
+        title="検索条件"
+        // centered
+        open={open}
+        onOk={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+        width={{
+          xs: '90%',
+          sm: '80%',
+          md: '70%',
+          lg: '60%',
+          xl: '50%',
+          xxl: '40%'
+        }}
+        // classNames={'bg-red-100'} 
+        classNames=''
+      >
+        <FilterModal modalContent={modalContent}/>
+      </Modal> */}
     </Layout>
       
   );
