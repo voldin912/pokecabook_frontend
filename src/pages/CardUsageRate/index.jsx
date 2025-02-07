@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 
 import PokemonCard from '../../components/PokemonCard';
 import { setCards, setOpen } from '../../store/slices/pokemonSlice';
-
+import { fetchCardCategories } from '../../store/slices/cardCategorySlice';
 import styles from './index.module.scss';
 
 const CardUsageRate = () => {
@@ -22,18 +22,25 @@ const CardUsageRate = () => {
   const tempCardCategories = useSelector((state) => state.cardCategory.cardCategories);
   const [cardCategories, setCardCategories] = useState(tempCardCategories);
 
+  const options = useSelector((state) => state.cardCategory.cardCategories);
+  console.log("options==>", options);
+
   useEffect(() => {
     setCardCategories(tempCardCategories);
-    console.log("cardCategories==>", cardCategories);
+    console.log("cardCategories_here==>", tempCardCategories);
   }, [tempCardCategories]);
 
   useEffect(() => {
-    // setFilterObj({
-      // ...filterObj,
-      // cardCategory: cardCategories
-    // });
-  }, [filterObj]);
+    dispatch(fetchCardCategories());
+  }, [dispatch]);
 
+  useEffect(() => {
+    setFilterObj({
+      ...filterObj,
+      cardCategory: cardCategories
+    });
+    console.log("filterObj_here==>", filterObj);
+  }, [filterObj]);
 
   const [loading, setLoading] = useState(false);
 
@@ -126,7 +133,7 @@ const CardUsageRate = () => {
             style={{
               width: 200,
             }}
-            // options={options}
+            options={options}
           />
         </Flex>
         <Flex>
