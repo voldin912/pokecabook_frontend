@@ -15,39 +15,28 @@ const CardUsageRate = () => {
   const [filterObj, setFilterObj] = useState({
     startDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
     endDate: dayjs().format('YYYY-MM-DD'),
-    cardCategory: 1
+    category: "ドラパルトex",
+    league: 2
   }); // Replace with your default filter object
+
+  const [fetchStatus, setFetchStatus] = useState(false);
   const openStatus = useSelector(state => state.pokemon.open);
 
-  const tempCardCategories = useSelector((state) => state.cardCategory.cardCategories);
-  const [cardCategories, setCardCategories] = useState(tempCardCategories);
-
-  const options = useSelector((state) => state.cardCategory.cardCategories);
-  console.log("options==>", options);
-
+  const cardCategoryOptions = useSelector((state) => state.cardCategory.cardCategories);
+  const leagueOptions = useSelector((state) => state.cardCategory.leagueOptions);
+  // This have to be removed
   useEffect(() => {
-    setCardCategories(tempCardCategories);
-    console.log("cardCategories_here==>", tempCardCategories);
-  }, [tempCardCategories]);
+    console.log("filterObj==>", filterObj);
+  }, [filterObj]);
 
   useEffect(() => {
     dispatch(fetchCardCategories());
   }, [dispatch]);
 
-  useEffect(() => {
-    setFilterObj({
-      ...filterObj,
-      cardCategory: cardCategories
-    });
-    console.log("filterObj_here==>", filterObj);
-  }, [filterObj]);
-
   const [loading, setLoading] = useState(false);
 
-  // const { startDate, endDate } = useSelector((state) => state.pokemon);
 
   useEffect(() => {
-    // Fetch data on initial render
     const fetchCards = async () => {
       setLoading(true);
       try {
@@ -60,18 +49,21 @@ const CardUsageRate = () => {
             },
           }
         );
-        dispatch(setCards(response.data)); // Assuming the response contains the card list
-
-        // const cardCategory = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/card-category`);
+        dispatch(setCards(response.data));
       } catch (error) {
         console.error('Error fetching cards:', error);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchCards();
-  }, []);
+  }, [fetchStatus, dispatch]);
+
+  const handleFetchCards = () => {
+    console.log("handleFetchCards is called");
+    setFetchStatus((prev) => !prev);
+  }
 
   const onStartDateChange = (date, dateString) => {
     setFilterObj({
@@ -87,17 +79,23 @@ const CardUsageRate = () => {
     });
   };
 
+  const onLeagueChange = (value) => {
+    setFilterObj({
+      ...filterObj,
+      league: value
+    });
+  }
+
   const cardCategoryChange = (value) => {
     console.log("value==>", value);
     setFilterObj({
       ...filterObj,
-      cardCategory: value
+      category: value
     });
   }
 
   const handleCancel = () => {
     dispatch(setOpen(!openStatus));
-    console.log("handleCancel is called and the backend fetch have to becalled");
   }
 
   return (
@@ -124,18 +122,11 @@ const CardUsageRate = () => {
       <Modal
         open={openStatus}
         onCancel={handleCancel}
-        onOk={handleCancel}
+        onOk={handleFetchCards}
+        okText="検索"
+        cancelText="キャンセル"
+        title="検索条件"
       >
-        <Flex gap={8}>
-          <Select
-            // defaultValue=""
-            onChange={cardCategoryChange}
-            style={{
-              width: 200,
-            }}
-            options={options}
-          />
-        </Flex>
         <Flex>
           <DatePicker 
             value={dayjs(filterObj.startDate)}
@@ -148,6 +139,28 @@ const CardUsageRate = () => {
             value={dayjs(filterObj.endDate)}
             onChange={onEndDateChange}
             allowClear={false}
+          />
+        </Flex>
+        
+        <Flex>
+          <Select
+            defaultValue={leagueOptions[0]?.value || 2}
+            options={leagueOptions}
+            onChange={onLeagueChange}
+            style={{
+              width: 200,
+            }}
+          />
+        </Flex>
+
+        <Flex gap={8}>
+          <Select
+            defaultValue={cardCategoryOptions[0]?.value || "ドラパルトex"}
+            onChange={cardCategoryChange}
+            style={{
+              width: 200,
+            }}
+            options={cardCategoryOptions}
           />
         </Flex>
       </Modal>

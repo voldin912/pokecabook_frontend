@@ -6,19 +6,11 @@ export const fetchCardCategories = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/card-category`);
-      console.log("response_here==>", response.data);
       const transformedData = response.data.map(item => ({
         value: item.category1_var,
         label: item.category1_var
       }));
 
-      // console.log("Here is me!");
-      // console.log("transformedData==>", transformedData);
-      
-      // if (!response.ok) {
-      //   return rejectWithValue(`HTTP error! status: ${response.status}`);
-      // }
-      
       return transformedData;
     } catch (error) {
       return rejectWithValue(
@@ -30,6 +22,19 @@ export const fetchCardCategories = createAsyncThunk(
 
 const initialState = {
   cardCategories: [],
+  leagueOptions: [{
+    value: 2,
+    label: "オープン"
+  }, {
+    value: 3,
+    label: "マスタ"
+  }, {
+    value: 4,
+    label: "ジュニア"
+  }, {
+    value: 5,
+    label: "シニア"
+  }],
   loading: false,
   error: null,
 };
@@ -51,7 +56,6 @@ export const cardCategorySlice = createSlice({
       })
       .addCase(fetchCardCategories.fulfilled, (state, action) => {
         state.loading = false;
-        // console.log("action.payload==>", action.payload);
         state.cardCategories = action.payload;
       })
       .addCase(fetchCardCategories.rejected, (state, action) => {
