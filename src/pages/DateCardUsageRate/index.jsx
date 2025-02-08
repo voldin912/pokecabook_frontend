@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchDayCard, selectDayCard, selectLoading, selectError } from '../../store/slices/dayCardSlice';
+import { fetchDayCard, selectDayCard } from '../../store/slices/dayCardSlice';
 import styles from './index.module.scss';
 import dayjs from 'dayjs';
 import { Pagination } from 'antd';
@@ -8,20 +8,23 @@ import { Pagination } from 'antd';
 const DateCardUsageRate = () => {
     const dispatch = useDispatch();
     const dayCard = useSelector(selectDayCard);
-    const loading = useSelector(selectLoading);
-    const error = useSelector(selectError);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(12);
-    const totalItems = dayCard.length;
+    const [totalItems, setTotalItems] = useState(0);
 
     useEffect(() => {
         dispatch(fetchDayCard());
     }, [dispatch]);
 
+    useEffect(() => {
+        setTotalItems(dayCard.length);
+    }, [dayCard]);
+
     const handlePaginationChange = (page, pageSize) => {
         setCurrentPage(page);
         setPageSize(pageSize);
+        dispatch(fetchDayCard());
     };
 
     return(

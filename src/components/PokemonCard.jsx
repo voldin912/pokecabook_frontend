@@ -6,9 +6,10 @@ import { selectSpecificDeckCount } from '../store/slices/pokemonSlice';
 import styles from './index.module.scss';
 
 const PokemonCard = ({data}) => {
-  const countsArray = data.COUNT.split(",");
-  const cardCountsArray = data.counts_array.split(",");
-  const specificDeckCount = useSelector(selectSpecificDeckCount);
+  const countsArray = data.COUNT?.split(",") || [];
+  const cardCountsArray = data.counts_array?.split(",") || [];
+  const specificDeckCount = useSelector(selectSpecificDeckCount) || 1; // Avoid division errors
+
   return(
     <Card
       bordered={false}
@@ -16,7 +17,7 @@ const PokemonCard = ({data}) => {
         <img
           alt="example"
           src={`https://www.pokemon-card.com/assets/images/card_images/large/${data.image_var}.jpg`}
-          style={{paddingLeft: "3%", paddingRight: "3%"}}
+          className={styles.cardImage}
         />
       }
       bodyStyle={{padding: "0"}}
@@ -29,8 +30,8 @@ const PokemonCard = ({data}) => {
           {countsArray.map((count, index) => (
             <tr key={index} className={styles.tableRow}>
               <td>{count && count}枚</td>
-              <td>{cardCountsArray[index] && cardCountsArray[index]}回</td>
-              <td>{(cardCountsArray[index] / specificDeckCount * 100).toFixed(1)}%</td>
+              <td>{cardCountsArray[index] ?? 0}回</td>
+              <td>{specificDeckCount > 0 ? ((cardCountsArray[index] / specificDeckCount) * 100).toFixed(1) : '0.0'}%</td>
             </tr>
           ))}
         </tbody>

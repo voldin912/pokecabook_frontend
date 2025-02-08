@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Flex, Select, DatePicker, Modal } from 'antd';
-// import { Line } from '@ant-design/charts';
 import axios from 'axios';
 import dayjs from 'dayjs'; 
 import locale from 'antd/es/date-picker/locale/ja_JP';
@@ -128,13 +127,13 @@ const CardUsageRate = () => {
           <p key="loading">Loading...</p>
         ) : (
           <>
-            {sortedCardsByCategory.map(({ category, cards }) => (
+            {sortedCardsByCategory.map(({ category, cards }, index) => (
               <Row
                 gutter={{ xs: 24.5, sm: 24.5, md: 29, lg: 29 }} // horizontal gutter
                 vertical={true}
               > 
                 <div key={category}>
-                  <h2>{category}</h2>
+                  <h2 key={index}>{category}</h2>
                   <div className={styles.cardContainer}>
                     {cards.map((card, index) => (
                         <PokemonCard data={card} />

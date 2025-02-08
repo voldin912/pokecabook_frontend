@@ -1,42 +1,3 @@
-// // Breakpoint variables
-// $breakpoints: (
-//   'mobile': 320px,
-//   'tablet': 768px,
-//   'laptop': 1024px,
-//   'desktop': 1440px
-// );
-
-// // Mixin for min-width (mobile first approach)
-// @mixin respond-above($breakpoint) {
-//   @if map-has-key($breakpoints, $breakpoint) {
-//     $breakpoint-value: map-get($breakpoints, $breakpoint);
-//     @media (min-width: $breakpoint-value) {
-//       @content;
-//     }
-//   }
-// }
-
-// // Mixin for max-width
-// @mixin respond-below($breakpoint) {
-//   @if map-has-key($breakpoints, $breakpoint) {
-//     $breakpoint-value: map-get($breakpoints, $breakpoint);
-//     @media (max-width: ($breakpoint-value - 1)) {
-//       @content;
-//     }
-//   }
-// }
-
-// // Mixin for a specific range
-// @mixin respond-between($lower, $upper) {
-//   @if map-has-key($breakpoints, $lower) and map-has-key($breakpoints, $upper) {
-//     $lower-breakpoint: map-get($breakpoints, $lower);
-//     $upper-breakpoint: map-get($breakpoints, $upper);
-//     @media (min-width: $lower-breakpoint) and (max-width: ($upper-breakpoint - 1)) {
-//       @content;
-//     }
-//   }
-// }
-
 // Breakpoint variables
 $breakpoints: (
   'mobile': 320px,
@@ -81,4 +42,3 @@ $breakpoints: (
     @warn "Breakpoints `#{$lower}` or `#{$upper}` not found in `$breakpoints` map.";
   }
 }
-

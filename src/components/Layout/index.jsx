@@ -85,12 +85,12 @@ const LayoutSide = () => {
               {
                 key: '2',
                 icon: <BsBuilding />,
-                label: <NavLink to="/dateshow">シティ結果(会場別)</NavLink>,
+                label: <NavLink to="/placeshow">シティ結果(会場別)</NavLink>,
               },
               {
                 key: '3',
                 icon: <CgCalendar />,
-                label: <NavLink to="/placeshow">シティ結果(日別)</NavLink>,
+                label: <NavLink to="/dateshow">シティ結果(日別)</NavLink>,
               },
             ]}
             className={`${styles.menuTag}`}

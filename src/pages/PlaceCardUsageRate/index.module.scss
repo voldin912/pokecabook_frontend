@@ -1,0 +1,45 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .placeCardWrapper {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        padding: 20px;
+        margin: 0 auto;
+
+        @media (max-width: 768px) {
+            grid-template-columns: repeat(2, minmax(200px, 1fr));
+            padding: 16px;
+        }
+
+        @media (max-width: 480px) {
+            grid-template-columns: 1fr;
+            padding: 12px;
+        }
+
+        .placeCard {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+
+            @media (max-width: 480px) {
+                padding: 12px;
+            }
+
+            img {
+                width: 100%;
+                height: auto;
+                border-radius: 4px;
+                margin-bottom: 12px;
+            }
+
+            p {
+                margin: 4px 0;
+                line-height: 1.4;
+            }
+        }
+    }
+}
