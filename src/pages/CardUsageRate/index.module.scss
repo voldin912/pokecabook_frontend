@@ -2,52 +2,59 @@
 
 .wrapper {
     // your CardUsageRate specific styles
-    background-color: rgb(184, 184, 230);
-    padding: 1rem;
-    font-size: 16px;
+    padding: 8px;
+    padding-top: 0px;
+    font-size: 20px;
     
     // Mobile styles (default)
     display: flex;
     flex-direction: column;
-    
+    align-items: center;
     // Tablet and above
     @include respond-below('tablet') {
-        background-color: green;
-        padding: 2rem;
-        font-size: 18px;
-        flex-direction: row;
+        padding: 4px;
+        font-size: 12px;
     }
-    
-    // Desktop only
-    // @include respond-above('desktop') {
-    //     background-color: yellow;
-    //     padding: 3rem;
-    //     max-width: 1200px;
-    //     margin: 0 auto;
-    // }
-    
-    // Mobile only
-    // @include respond-below('tablet') {
-    //     margin: 0 1rem;
-    //     background-color: red;
-    // }
-    
-    // Only tablet range
-    // @include respond-between('tablet', 'laptop') {
-    //     margin: 0 2rem;
-    //     background-color: blue;
-    // }
 }
 
-// Example with a card component
-.card {
-    width: 100%;
-    background-color: green;
-    @include respond-above('tablet') {
-        width: 50%;
+.cardContainer {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    padding: 5px;
+    gap: 25px 20px;
+
+    @include respond-below('desktop') {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 18px 10px;
     }
-    
-    @include respond-above('laptop') {
-        width: 33.333%;
+
+    @include respond-below('laptop') {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 12px;
+    }
+
+    @include respond-below('tablet') {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px 6px;
+    }
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 30px;
+    background-color: #f2a66e;
+    padding: 10px;
+    padding-left: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+
+    @include respond-below('tablet') {
+        font-size: 16px;
+        margin-top: 10px;
+        padding: 4px;
+        padding-left: 10px;
+        border-radius: 3px;
     }
 }

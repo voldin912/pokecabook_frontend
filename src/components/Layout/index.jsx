@@ -11,12 +11,12 @@ import { BsBuilding } from "react-icons/bs";
 import { Layout, Menu, theme, Grid, Button } from 'antd';
 import { UnorderedListOutlined } from '@ant-design/icons';
 import styles from './index.module.scss';
-import { setOpen, selectOpen } from '../../store/slices/pokemonSlice';
+import { setOpen, selectOpen, selectDeckCount, selectEventCount, selectSpecificDeckCount } from '../../store/slices/pokemonSlice';
 
 const { Header, Sider, Content } = Layout;
 const { useBreakpoint } = Grid;
 
-const LayoutSide = ({modalContent}) => {
+const LayoutSide = () => {
 
   const dispatch = useDispatch();
   const screens = useBreakpoint();
@@ -24,7 +24,10 @@ const LayoutSide = ({modalContent}) => {
   const [collapsed, setCollapsed] = useState(false);
   const [sidebarPresentStatus, setSidebarPresentStatus] = useState(false);
   const openStatus = useSelector(selectOpen);
-  
+  const deckCount = useSelector(selectDeckCount);
+  const eventCount = useSelector(selectEventCount);
+  const specificDeckCount = useSelector(selectSpecificDeckCount);
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -35,7 +38,6 @@ const LayoutSide = ({modalContent}) => {
   }, [screens.md]);
 
   const changeModalStatus = () => {
-    console.log("changeModalStatus is called==>", openStatus);
     dispatch(setOpen(!openStatus));
   }
 
@@ -54,11 +56,11 @@ const LayoutSide = ({modalContent}) => {
           </span>
         </div>
         
-        <div className={`${responsive ? styles.logoContainer : styles.logoContainerAlone}`} style={{width: '50px', height:'50px'}}>
-          <UnorderedListOutlined onClick={() => setSidebarPresentStatus(!sidebarPresentStatus)}  style={{width: '100%', height:'100%'}}/>
+        <div className={`${responsive ? styles.logoContainer : styles.logoContainerAlone}`} style={{fontSize: '22px'}}>
+          <UnorderedListOutlined onClick={() => setSidebarPresentStatus(!sidebarPresentStatus)}/>
         </div>
 
-        <div style={{marginRight: '10px', width: '30px', height:'30px'}} onClick={changeModalStatus} className='bg-red-300'>
+        <div style={{marginRight: '17px', width: '30px', height:'30px'}} onClick={changeModalStatus}>
           <LiaSearchSolid style={{width: '100%', height:'100%'}}/>
         </div>
       </div>
@@ -76,7 +78,8 @@ const LayoutSide = ({modalContent}) => {
             items={[
               {
                 key: '1',
-                icon: <CgPokemon />,
+                // icon: <CgPokemon style={{ fontSize: '24px' }} />,
+                icon: <CgPokemon height="36px" width="36px"/>,
                 label: <NavLink to="/">カード採用率</NavLink>,
               },
               {
@@ -94,25 +97,35 @@ const LayoutSide = ({modalContent}) => {
           />
         </Sider>
         <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
+          <Header style={{ padding: 0, background: colorBgContainer, display: 'flex', justifyContent: 'space-between', alignItems: 'stretch' }}>
             <Button
               type="text"
               icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               onClick={() => setCollapsed(!collapsed)}
               style={{
                 fontSize: '16px',
-                width: 64,
-                height: 64,
+                width: '64px',
+                height: '64px',
+                '@media (max-width: 768px)': {
+                  fontSize: '14px',
+                  width: '48px', 
+                  height: '48px',
+                },
+                '@media (max-width: 480px)': {
+                  fontSize: '12px',
+                  width: '36px',
+                  height: '36px',
+                }
               }}
               className={`${responsive ? styles.none : styles.show}`}
             />
+            <span className={styles.headerText}>{eventCount} イベント / {deckCount} デッキ中 /対象<span style={{color: '#008000', fontWeight: 'bold'}}>{specificDeckCount}</span> デッキ</span>
           </Header>
           <Content
             style={{
-              margin: '24px 16px',
-              padding: 24,
-              minHeight: 280,
-              background: colorBgContainer,
+              padding: 8,
+              paddingTop: '0px',
+              minHeight: 'calc(100vh - 128px)',
               borderRadius: borderRadiusLG,
             }}
           >
@@ -120,28 +133,7 @@ const LayoutSide = ({modalContent}) => {
           </Content>
         </Layout>
       </Layout>
-      
-      {/* <Modal
-        title="検索条件"
-        // centered
-        open={open}
-        onOk={() => setOpen(false)}
-        onCancel={() => setOpen(false)}
-        width={{
-          xs: '90%',
-          sm: '80%',
-          md: '70%',
-          lg: '60%',
-          xl: '50%',
-          xxl: '40%'
-        }}
-        // classNames={'bg-red-100'} 
-        classNames=''
-      >
-        <FilterModal modalContent={modalContent}/>
-      </Modal> */}
     </Layout>
-      
   );
 };
 

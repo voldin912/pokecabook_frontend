@@ -26,7 +26,7 @@
     }
     
     &Text {
-      font-size: 18px;
+      font-size: 24px;
       font-weight: bold;
       color: $primary-color;
       overflow: hidden;
@@ -58,11 +58,21 @@
       flex-direction: row;
       align-items: center;
       gap: 8px;
-      margin: auto 10px;
+      margin: auto 20px;
   
       &Alone {
         display: none;
       }
+    }
+  }
+
+  &Text {
+    font-size: 16px;
+    padding-right: 18px;
+
+    @include respond-below('tablet') {
+      font-size: 12px;
+      padding-right: 0px;
     }
   }
 }

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  margin: 0;
+}
+
 *, *::after, *::before {
   margin: 0px;
   padding: 0px;
