@@ -119,7 +119,9 @@ const LayoutSide = () => {
               }}
               className={`${responsive ? styles.none : styles.show}`}
             />
-            <span className={styles.headerText}>{eventCount} イベント / {deckCount} デッキ中 /対象<span style={{color: '#008000', fontWeight: 'bold'}}>{specificDeckCount}</span> デッキ</span>
+            {!window.location.pathname.includes('placeshow') && !window.location.pathname.includes('dateshow') && (
+              <span className={styles.headerText}>{eventCount} イベント / {deckCount} デッキ中 /対象<span style={{color: '#008000', fontWeight: 'bold'}}>{specificDeckCount}</span> デッキ</span>
+            )}
           </Header>
           <Content
             style={{
