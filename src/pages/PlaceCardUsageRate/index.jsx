@@ -30,14 +30,20 @@ const PlaceCardUsageRate = () => {
             {status === 'succeeded' && (
                 <div className={styles.placeCardWrapper}>
                     {placeCard.map((card) => (
-                        <div key={card.deck_ID_var} className={styles.placeCard}>
+                        <a 
+                            key={card.deck_ID_var} 
+                            className={styles.placeCard} 
+                            href={`${window.location.href}/${card.event_holding_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             <picture>
                                 <source srcSet={`https://www.pokemon-card.com/deck/deckView.php/deckID/${card.deck_ID_var}.webp`} type="image/webp" />
                                 <img src={`https://www.pokemon-card.com/deck/deckView.php/deckID/${card.deck_ID_var}.png`} alt="deck_ID_var's image" />
                             </picture>
                             <p>{dayjs(card.event_date_date).format('YYYY年MM月DD日')} {card.event_place_var}</p>
                             <span>{dayjs(card.event_date_date).format('YYYY.MM.DD')} </span>
-                        </div>
+                        </a>
                     ))}
                 </div>
             )}

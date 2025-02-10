@@ -11,6 +11,7 @@ import LayoutSide from "./components/Layout";
 import CardUsageRate from "./pages/CardUsageRate";
 import DateCardUsageRate from "./pages/DateCardUsageRate";
 import PlaceCardUsageRate from "./pages/PlaceCardUsageRate";
+import PlaceCardUsageDetail from "./pages/PlaceCardUsageDetail";
 import NotFound from "./pages/NotFound";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route index element={<CardUsageRate />} />
           <Route path="dateshow" element={<DateCardUsageRate />} />
           <Route path="placeshow" element={<PlaceCardUsageRate />} />
+          <Route path="placeshow/:event_holding_id" element={<PlaceCardUsageDetail />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
