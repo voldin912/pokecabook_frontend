@@ -31,14 +31,14 @@ const DateCardUsageRate = () => {
         <div className={styles.wrapper}>
             <div className={styles.dateCardWrapper}>
                 {dayCard.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((card, index) => (
-                    <div key={index} className={styles.dateCard}>
+                    <a key={index} className={styles.dateCard} href={`/dateshow/${dayjs(card.event_date_date).format('YYYY-MM-DD')}`} target="_blank" rel="noopener noreferrer">
                         <picture>
                             <source srcSet={`https://www.pokemon-card.com/deck/deckView.php/deckID/${card.deck_ID_var}.webp`} type="image/webp" />
                             <img src={`https://www.pokemon-card.com/deck/deckView.php/deckID/${card.deck_ID_var}.png`} alt="deck_ID_var's image" />
                         </picture>
                         <p>{dayjs(card.event_date_date).format('YYYY年MM月DD日')} / {card.event_count} 会場</p>
                         <p>{card.event_title_var}</p>
-                    </div>
+                    </a>
                 ))}
             </div>
             <Pagination
