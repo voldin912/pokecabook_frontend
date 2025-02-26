@@ -1,0 +1,21 @@
+.pokemonAuth {
+    height: 400px;
+    padding : 20px;
+
+    .authPart {
+        padding-inline: 50px;
+        padding-block: 20px;
+        width: 500px;
+        margin: 0 auto;
+        margin-top: 300px;
+        button {
+           transition: all .5s;
+           background-color: rgb(138, 138, 138);
+           color: rgb(236, 236, 236); 
+        }
+        button:hover {
+           background-color: aliceblue;
+           color: rgb(0, 0, 0); 
+        }
+    }
+}

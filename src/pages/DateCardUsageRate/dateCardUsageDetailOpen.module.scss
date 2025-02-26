@@ -1,0 +1,35 @@
+.titleWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.titleWrapper:hover {
+    background-color: #e0e0e0;
+}
+
+.icon {
+    transition: transform 0.3s ease-in-out;
+}
+
+.decksWrapper {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+.show {
+    max-height: 10000px; // Adjust as needed
+    opacity: 1;
+}
+
+.hide {
+    max-height: 0;
+    opacity: 0;
+}

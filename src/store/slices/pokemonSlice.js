@@ -8,6 +8,7 @@ const initialState = {
   loading: false,
   error: null,
   open: false,
+  cardcategory_conds: ""
 };
 
 export const pokemonSlice = createSlice({
@@ -29,10 +30,13 @@ export const pokemonSlice = createSlice({
       state.event_count = action.payload.filtered_events_count;
       state.specific_deck_count = action.payload.filtered_specific_decks_count;
     },
+    setCardConds: (state, action) =>{
+      state.cardcategory_conds = action.payload;
+    }
   },
 });
 
-export const { setLoading, setError, setOpen, setCards } = pokemonSlice.actions;
+export const { setLoading, setError, setOpen, setCards, setCardConds } = pokemonSlice.actions;
 
 // Selectors
 export const selectLoading = (state) => state.pokemon.loading;
@@ -42,5 +46,6 @@ export const selectCards = (state) => state.pokemon.cards;
 export const selectDeckCount = (state) => state.pokemon.decks_count;
 export const selectEventCount = (state) => state.pokemon.event_count;
 export const selectSpecificDeckCount = (state) => state.pokemon.specific_deck_count;
+export const selectConditions = (state) => state.pokemon.cardcategory_conds;
 
 export default pokemonSlice.reducer;

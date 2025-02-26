@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Flex, Select, DatePicker, Modal } from 'antd';
 import axios from 'axios';
-import dayjs from 'dayjs'; 
+import dayjs from 'dayjs';
 import locale from 'antd/es/date-picker/locale/ja_JP';
 import PokemonCard from '../../components/PokemonCard';
-import { setCards, setOpen } from '../../store/slices/pokemonSlice';
+import { setCardConds, setCards, setOpen } from '../../store/slices/pokemonSlice';
 import { fetchCardCategories } from '../../store/slices/cardCategorySlice';
 import styles from './index.module.scss';
 
@@ -23,6 +23,36 @@ const CardUsageRate = () => {
   const [fetchStatus, setFetchStatus] = useState(false);
   const [sortedCardsByCategory, setSortedCardsByCategory] = useState([]);
   const cards = useSelector(state => state.pokemon.cards);
+  const [categoryName, setCategoryName] = useState('ドラパルトex')
+
+  const postDetailCategory = async (xxx) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/detailCategory`, 
+        JSON.stringify({
+          name: xxx
+        }), 
+        { headers: { "Content-Type": "application/json" } }
+      );
+      if(response.data) {
+        localStorage.setItem('conds', response.data.conds)
+        console.log('****kohei',response.data)
+      }
+    } catch (err) {
+      console.error("Request failed:", err?.response?.data || err.message);
+    }
+  };
+  useEffect(() => {
+    postDetailCategory();
+  },[]) 
+  
+  useEffect(() => {
+    localStorage.setItem('category', categoryName)
+  }, [categoryName])
+
+  useEffect(()=> {
+    localStorage.setItem('category', 'ドラパルトex')
+  },[])
 
   useEffect(() => {
     // Process cards whenever they change
@@ -49,6 +79,7 @@ const CardUsageRate = () => {
   const cardCategoryOptions = useSelector((state) => state.cardCategory.cardCategories);
   const leagueOptions = useSelector((state) => state.cardCategory.leagueOptions);
   // This have to be removed
+
 
   useEffect(() => {
     dispatch(fetchCardCategories());
@@ -77,9 +108,22 @@ const CardUsageRate = () => {
         setLoading(false);
       }
     };
-  
+
     fetchCards();
+
+    //================
+
+    if(categoryName){
+      postDetailCategory(categoryName);
+    }
+
+    //================
+
   }, [fetchStatus, dispatch]);
+
+  useEffect(() => {
+
+  }, [])
 
   const handleFetchCards = () => {
     setFetchStatus((prev) => !prev);
@@ -108,11 +152,14 @@ const CardUsageRate = () => {
   }
 
   const cardCategoryChange = (value) => {
+    console.log(value, "value");
     setFilterObj({
       ...filterObj,
-      category: value
+      category: value,
     });
+    setCategoryName(value)
   }
+
 
   const handleCancel = () => {
     dispatch(setOpen(!openStatus));
@@ -131,12 +178,12 @@ const CardUsageRate = () => {
               <Row
                 gutter={{ xs: 24.5, sm: 24.5, md: 29, lg: 29 }} // horizontal gutter
                 vertical={true}
-              > 
+              >
                 <div key={category}>
                   <h2 key={index}>{category}</h2>
                   <div className={styles.cardContainer}>
                     {cards.map((card, index) => (
-                        <PokemonCard data={card} />
+                      <PokemonCard data={card} />
                     ))}
                   </div>
                 </div>
@@ -153,26 +200,26 @@ const CardUsageRate = () => {
           cancelText="キャンセル"
           title="検索条件"
         >
-          <Flex justify='space-evenly' align='center' style={{marginBottom: '10px', paddingTop: '20px'}}>
+          <Flex justify='space-evenly' align='center' style={{ marginBottom: '10px', paddingTop: '20px' }}>
             <label>開催日</label>
-            <DatePicker 
+            <DatePicker
               value={dayjs(filterObj.startDate)}
               onChange={onStartDateChange}
               allowClear={false}
               locale={locale}
             />
           </Flex>
-          <Flex justify='space-evenly' align='center' style={{marginBottom: '10px'}}>
+          <Flex justify='space-evenly' align='center' style={{ marginBottom: '10px' }}>
             <label>終了日</label>
-            <DatePicker 
+            <DatePicker
               value={dayjs(filterObj.endDate)}
               onChange={onEndDateChange}
               allowClear={false}
               locale={locale}
             />
           </Flex>
-          
-          <Flex justify='space-evenly' align='center' style={{marginBottom: '10px'}}>
+
+          <Flex justify='space-evenly' align='center' style={{ marginBottom: '10px' }}>
             <label>&nbsp; リーグ &nbsp;</label>
             <Select
               defaultValue={leagueOptions[0]?.value || 2}
@@ -184,7 +231,7 @@ const CardUsageRate = () => {
             />
           </Flex>
 
-          <Flex justify='space-evenly' align='center' style={{marginBottom: '20px', paddingBottom: '20px'}}>
+          <Flex justify='space-evenly' align='center' style={{ marginBottom: '20px', paddingBottom: '20px' }}>
             <label>カテゴリ</label>
             <Select
               defaultValue={cardCategoryOptions[0]?.value || "ドラパルトex"}
@@ -201,4 +248,4 @@ const CardUsageRate = () => {
   );
 };
 
-export default CardUsageRate;
+export default CardUsageRate; 

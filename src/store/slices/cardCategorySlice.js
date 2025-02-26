@@ -7,10 +7,10 @@ export const fetchCardCategories = createAsyncThunk(
     try {
       const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/card-category`);
       const transformedData = response.data.map(item => ({
+        conds: item.conds,
         value: item.category1_var,
-        label: item.category1_var
+        label: item.category1_var,
       }));
-
       return transformedData;
     } catch (error) {
       return rejectWithValue(
