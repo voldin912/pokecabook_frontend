@@ -174,7 +174,7 @@ const CardUsageRate = () => {
           <p key="loading">Loading...</p>
         ) : (
           <>
-            {sortedCardsByCategory.map(({ category, cards }, index) => (
+            {sortedCardsByCategory.length > 0 && sortedCardsByCategory.map(({ category, cards }, index) => (
               <Row
                 gutter={{ xs: 24.5, sm: 24.5, md: 29, lg: 29 }} // horizontal gutter
                 vertical={true}
@@ -189,6 +189,11 @@ const CardUsageRate = () => {
                 </div>
               </Row>
             ))}
+            {
+              sortedCardsByCategory.length == 0 && <div>
+                カテゴリに該当するデッキがありません。
+              </div>
+            }
           </>
         )}
 
