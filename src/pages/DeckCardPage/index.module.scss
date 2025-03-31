@@ -1,0 +1,60 @@
+@import '../../styles/breakpoints';
+
+.wrapper {
+    // your CardUsageRate specific styles
+    padding: 8px;
+    padding-top: 0px;
+    font-size: 20px;
+    
+    // Mobile styles (default)
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // Tablet and above
+    @include respond-below('tablet') {
+        padding: 4px;
+        font-size: 12px;
+    }
+}
+
+.cardContainer {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    padding: 5px;
+    gap: 25px 20px;
+
+    @include respond-below('desktop') {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 18px 10px;
+    }
+
+    @include respond-below('laptop') {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px 12px;
+    }
+
+    @include respond-below('tablet') {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px 6px;
+    }
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 30px;
+    background-color: #f2a66e;
+    padding: 10px;
+    padding-left: 20px;
+    // margin-left: 25px;
+    margin-right: 5px;
+    border-radius: 5px;
+
+    @include respond-below('tablet') {
+        font-size: 16px;
+        margin-top: 10px;
+        padding: 4px;
+        padding-left: 10px;
+        border-radius: 3px;
+    }
+}

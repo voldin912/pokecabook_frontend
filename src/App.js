@@ -19,7 +19,7 @@ import NotFound from "./pages/NotFound";
 import PokemonAuth from './pages/LoginPage/LoginPage';
 import UserManagement from './pages/UserManagement/UserManagement';
 import Category from './pages/CategoryPage/CategoryPage';
-
+import DeckCardPage from './pages/DeckCardPage/'
 function App() {
   return (
     <Router>
@@ -29,6 +29,7 @@ function App() {
           {/* Nested Routes */}
           <Route index element={<CardUsageRate />} />
           <Route path="dateshow" element={<DateCardUsageRate />} />
+          <Route path="deckshow" element={<DeckCardPage />} />
           <Route path="dateshow/:event_holding_date" element={<DateCardUsageDetail />} />
           <Route path="placeshow" element={<PlaceCardUsageRate />} />
           <Route path="users" element={<UserManagement />} />

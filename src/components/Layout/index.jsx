@@ -7,7 +7,7 @@ import {
   LogoutOutlined
 } from '@ant-design/icons';
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { CgPokemon, CgCalendar, CgUserList, CgData } from "react-icons/cg";
+import { CgPokemon, CgCalendar, CgUserList, CgData, CgCamera } from "react-icons/cg";
 import { LiaSearchSolid } from "react-icons/lia";
 import { BsBuilding } from "react-icons/bs";
 import { Layout, Menu, theme, Grid, Button } from 'antd';
@@ -138,6 +138,11 @@ const LayoutSide = () => {
                 key: '3',
                 icon: <CgCalendar />,
                 label: <NavLink to="/dateshow">シティ結果(日別)</NavLink>,
+              },
+              {
+                key: '6',
+                icon: <CgCamera />,
+                label: <NavLink to="/deckshow">デッキ検索</NavLink>,
               },
               (token) &&
               {
