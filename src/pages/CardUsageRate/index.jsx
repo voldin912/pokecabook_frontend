@@ -5,7 +5,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import locale from 'antd/es/date-picker/locale/ja_JP';
 import PokemonCard from '../../components/PokemonCard';
-import { setCardConds, setCards, setOpen } from '../../store/slices/pokemonSlice';
+import { setCardConds, setCards, setOpenSearch } from '../../store/slices/pokemonSlice';
 import { fetchCardCategories } from '../../store/slices/cardCategorySlice';
 import styles from './index.module.scss';
 
@@ -74,13 +74,15 @@ const CardUsageRate = () => {
 
     setSortedCardsByCategory(sorted);
   }, [cards]); // Re-run when cards change
-  const openStatus = useSelector(state => state.pokemon.open);
+  const openStatus = useSelector(state => state.pokemon.setOpenSearch);
 
   const cardCategoryOptions = useSelector((state) => state.cardCategory.cardCategories);
   const leagueOptions = useSelector((state) => state.cardCategory.leagueOptions);
   // This have to be removed
 
-
+  useEffect(() => {
+    console.log('123', openStatus);
+  }, [])
   useEffect(() => {
     dispatch(fetchCardCategories());
   }, [dispatch]);
@@ -127,7 +129,7 @@ const CardUsageRate = () => {
 
   const handleFetchCards = () => {
     setFetchStatus((prev) => !prev);
-    dispatch(setOpen(!openStatus));
+    dispatch(setOpenSearch(!openStatus));
   }
 
   const onStartDateChange = (date, dateString) => {
@@ -162,7 +164,7 @@ const CardUsageRate = () => {
 
 
   const handleCancel = () => {
-    dispatch(setOpen(!openStatus));
+    dispatch(setOpenSearch(!openStatus));
   }
 
   return (

@@ -7,7 +7,8 @@ const initialState = {
   specific_deck_count: 0,
   loading: false,
   error: null,
-  open: false,
+  openSearch: false,
+  openDeck: false,
   cardcategory_conds: ""
 };
 
@@ -21,8 +22,9 @@ export const pokemonSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
-    setOpen: (state, action) => {
-      state.open = action.payload;
+    setOpenSearch: (state, action) => {
+      state.openSearch = action.payload;
+      console.log('-------------', action.payload);
     },
     setCards: (state, action) => {
       state.cards = action.payload.rows;
@@ -36,12 +38,12 @@ export const pokemonSlice = createSlice({
   },
 });
 
-export const { setLoading, setError, setOpen, setCards, setCardConds } = pokemonSlice.actions;
+export const { setLoading, setError, setOpenSearch, setCards, setCardConds } = pokemonSlice.actions;
 
 // Selectors
 export const selectLoading = (state) => state.pokemon.loading;
 export const selectError = (state) => state.pokemon.error;
-export const selectOpen = (state) => state.pokemon.open; 
+export const selectOpenSearch = (state) => state.pokemon.openSearch; 
 export const selectCards = (state) => state.pokemon.cards;
 export const selectDeckCount = (state) => state.pokemon.decks_count;
 export const selectEventCount = (state) => state.pokemon.event_count;

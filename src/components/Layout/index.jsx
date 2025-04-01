@@ -14,7 +14,7 @@ import { Layout, Menu, theme, Grid, Button } from 'antd';
 import { UnorderedListOutlined } from '@ant-design/icons';
 import styles from './index.module.scss';
 import { UpOutlined } from '@ant-design/icons';
-import { setOpen, selectOpen, selectDeckCount, selectEventCount, selectSpecificDeckCount, selectConditions } from '../../store/slices/pokemonSlice';
+import { setOpenSearch, selectOpenSearch, selectDeckCount, selectEventCount, selectSpecificDeckCount, selectConditions } from '../../store/slices/pokemonSlice';
 import { selectCardCategory } from '../../store/slices/cardCategorySlice';
 import axios from 'axios';
 
@@ -27,7 +27,7 @@ const LayoutSide = () => {
   const [responsive, setResponsive] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [sidebarPresentStatus, setSidebarPresentStatus] = useState(false);
-  const openStatus = useSelector(selectOpen);
+  const openStatus = useSelector(selectOpenSearch);
   const deckCount = useSelector(selectDeckCount);
   const eventCount = useSelector(selectEventCount);
   const specificDeckCount = useSelector(selectSpecificDeckCount);
@@ -45,9 +45,12 @@ const LayoutSide = () => {
   }, [screens.md]);
 
   const changeModalStatus = () => {
-    dispatch(setOpen(!openStatus));
+    dispatch(setOpenSearch(!openStatus));
   }
   
+  const changeDeckModalStatus = () => {
+    dispatch(setOpenSearch(!openStatus));
+  }
   const handleLogin = () => {
     if (token) {
       localStorage.removeItem("token")
@@ -94,8 +97,13 @@ const LayoutSide = () => {
           <UnorderedListOutlined onClick={() => setSidebarPresentStatus(!sidebarPresentStatus)} />
         </div>
         <div className="loginSearch" style={{ display: "flex", borderRadius: '10px', backgroundColor: "whitesmoke", padding: "5px", cursor: "pointer"}} >
-          {!window.location.pathname.includes('placeshow') && !window.location.pathname.includes('dateshow') && !window.location.pathname.includes('users') && !window.location.pathname.includes('category') &&
+          {!window.location.pathname.includes('placeshow') && !window.location.pathname.includes('dateshow') && !window.location.pathname.includes('users') && !window.location.pathname.includes('category') && !window.location.pathname.includes('deckshow') &&
             <div style={{ marginRight: '17px', width: '60px', height: '30px', display:'flex' }} onClick={changeModalStatus}>
+              <div style={{fontSize:"12px"}}>条件検索</div>
+              <LiaSearchSolid style={{ width: '120%', height: '120%' }} />
+            </div>}
+            {window.location.pathname.includes('deckshow') &&
+            <div style={{ marginRight: '17px', width: '60px', height: '30px', display:'flex' }} onClick={changeDeckModalStatus}>
               <div style={{fontSize:"12px"}}>条件検索</div>
               <LiaSearchSolid style={{ width: '120%', height: '120%' }} />
             </div>}
