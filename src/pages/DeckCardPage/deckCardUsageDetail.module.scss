@@ -1,0 +1,48 @@
+.deckCardWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .decksWrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+
+            picture {
+                width: 100%;
+                
+                source {
+                    width: 100%;
+                }
+
+                img {
+                    width: 100%;
+                }
+            }
+
+            .order {
+                text-align: left;
+                font-weight: bold;
+                font-size: 18px;
+                color: #232323;
+                margin-top: 12px;
+                padding-left: 6px;
+                background-color: #ddd;
+
+                @media (max-width: 768px) {
+                    font-size: 16px;
+                }
+
+                .point {
+                    color: #f2a66e;
+                }
+            }
+        }
+    }
+}

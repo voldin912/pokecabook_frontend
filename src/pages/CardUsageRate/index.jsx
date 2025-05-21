@@ -69,20 +69,17 @@ const CardUsageRate = () => {
       .sort(([a], [b]) => Number(a) - Number(b))
       .map(([category, categoryCards]) => ({
         category: groupNames[Number(category) - 1],
-        cards: categoryCards.sort((a, b) => a.name_var.localeCompare(b.name_var))
+        cards: categoryCards
       }));
 
     setSortedCardsByCategory(sorted);
   }, [cards]); // Re-run when cards change
-  const openStatus = useSelector(state => state.pokemon.setOpenSearch);
+  const openStatus = useSelector(state => state.pokemon.openSearch);
 
   const cardCategoryOptions = useSelector((state) => state.cardCategory.cardCategories);
   const leagueOptions = useSelector((state) => state.cardCategory.leagueOptions);
   // This have to be removed
 
-  useEffect(() => {
-    console.log('123', openStatus);
-  }, [])
   useEffect(() => {
     dispatch(fetchCardCategories());
   }, [dispatch]);
@@ -94,6 +91,7 @@ const CardUsageRate = () => {
     const fetchCards = async () => {
       setLoading(true);
       try {
+        console.log('filterObj', filterObj);
         const response = await axios.post(
           `${process.env.REACT_APP_BACKEND_URL}/api/cards`,
           filterObj,
@@ -244,7 +242,7 @@ const CardUsageRate = () => {
               defaultValue={cardCategoryOptions[0]?.value || "ドラパルトex"}
               onChange={cardCategoryChange}
               style={{
-                width: 200,
+                width: 250,
               }}
               options={cardCategoryOptions}
             />

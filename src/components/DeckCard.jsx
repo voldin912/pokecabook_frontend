@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Card } from 'antd';
-import { selectSpecificDeckCount } from '../store/slices/pokemonSlice';
+import { selectSpecificDeckCount } from '../store/slices/deckCardSlice';
 
 import styles from './index.module.scss';
 
@@ -15,7 +15,7 @@ const PokemonCard = ({data}) => {
       cover={
         <img
           alt="example"
-          src={`https://www.pokemon-card.com/assets/images/card_images/large/${data.image_var}.jpg`}
+          src={`https://www.pokemon-card.com/deck/deckView.php/deckID/${data.deck_ID_var}.png`}
           className={styles.cardImage}
         />
       }

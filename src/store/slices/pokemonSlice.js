@@ -24,7 +24,6 @@ export const pokemonSlice = createSlice({
     },
     setOpenSearch: (state, action) => {
       state.openSearch = action.payload;
-      console.log('-------------', action.payload);
     },
     setCards: (state, action) => {
       state.cards = action.payload.rows;

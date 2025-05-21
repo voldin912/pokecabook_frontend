@@ -1,142 +1,75 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Flex, Select, DatePicker, Modal } from 'antd';
-import axios from 'axios';
+import { fetchDeckCard, fetchTotalDeckCardLength, selectDeckCard, selectStatus, selectTotalDeckCardLength, setOpenDeckSearch } from '../../store/slices/deckCardSlice';
+import { Pagination, Row, Flex, Select, DatePicker, Modal, } from 'antd';
 import dayjs from 'dayjs';
-import locale from 'antd/es/date-picker/locale/ja_JP';
-import PokemonCard from '../../components/PokemonCard';
-import { setCardConds, setCards, setOpenSearch } from '../../store/slices/pokemonSlice';
-import { fetchCardCategories } from '../../store/slices/cardCategorySlice';
 import styles from './index.module.scss';
-
-const groupNames = ["ACE SPEC", "ポケモン", "グッズ", "どうぐ", "サポート", "スタジアム", "エネルギー"];
+import locale from 'antd/es/date-picker/locale/ja_JP';
+import { setTwoToneColor } from '@ant-design/icons/lib/components/twoTonePrimaryColor';
+import { fetchCardCategories } from '../../store/slices/cardCategorySlice';
+import { ExternalLink } from "lucide-react";
+const pageSizeOptions = [12, 24, 48];
 const DeckCardPage = () => {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  const [filterObj, setFilterObj] = useState({
-    startDate: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
-    endDate: dayjs().format('YYYY-MM-DD'),
-    category: "ドラパルトex",
-    league: 2
-  }); // Replace with your default filter object
-
-  const [fetchStatus, setFetchStatus] = useState(false);
-  const [sortedCardsByCategory, setSortedCardsByCategory] = useState([]);
-  const cards = useSelector(state => state.pokemon.cards);
-  const [categoryName, setCategoryName] = useState('ドラパルトex')
-  // const [openStatus, setOpenStatus] = useState(false);
-  const [startDate, setStartDate] = useState(dayjs("2025-03-31"));
-  const [endDate, setEndDate] = useState(dayjs("2025-04-04"));
-  const [league, setLeague] = useState(2);
-  const [category, setCategory] = useState("ドラパルトex");
-  // const leagueOptions = [{ value: 2, label: "全て" }];
-  // const cardCategoryOptions = [{ value: "ドラパルトex", label: "ドラパルトex" }];
-
-  // const handleCancel = () => setOpenStatus(false);
-  // const handleFetchCards = () => setOpenStatus(false);
-  const postDetailCategory = async (xxx) => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/detailCategory`, 
-        JSON.stringify({
-          name: xxx
-        }), 
-        { headers: { "Content-Type": "application/json" } }
-      );
-      if(response.data) {
-        localStorage.setItem('conds', response.data.conds)
-        console.log('****kohei',response.data)
+    const [fetchStatus, setFetchStatus] = useState(false);
+    const decks = useSelector(state => state.deckCard.decks);
+    const [categoryName, setCategoryName] = useState('ドラパルトex')
+    
+    const openDeck = useSelector(state => state.deckCard.openDeck);
+    const [totalDeckCardLength, setTotalDeckCardLength] = useState(0);
+    const totalDeckCard = useSelector(selectDeckCard);
+    const [deckCard, setDeckCard] = useState([]);
+    const status = useSelector(selectStatus);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(pageSizeOptions[0]);
+    const [filterObj, setFilterObj] = useState({
+      startDate: '2025-03-29',
+      endDate: '2025-04-05',
+      category: "",
+      cardName: "",
+      league: 2
+    });
+    const cardCategoryOptions = useSelector((state) => state.cardCategory.cardCategories);
+    const leagueOptions = useSelector((state) => state.cardCategory.leagueOptions);
+    
+    useEffect(() => {
+        dispatch(fetchDeckCard({ page: 1, pageSize: 12, filterObj }));   // Just for the first render
+        const sortedDeck = [...totalDeckCard].sort((a, b) => a.rank_int - b.rank_int);
+        const startIndex = (currentPage - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        console.log('Sorted Deck!!!!!!!!!!!!!!!!:', sortedDeck, startIndex, endIndex);
+        setDeckCard(sortedDeck.slice(startIndex, endIndex));
+      console.log('Sorted Deck-----------:', deckCard);
+    }, []);
+    useEffect(() => {
+      dispatch(fetchCardCategories());
+    }, [dispatch]);
+      
+    useEffect(() => {
+      if(totalDeckCard && totalDeckCard.length > 0) {
+        const sortedDeck = [...totalDeckCard].sort((a, b) => a.rank_int - b.rank_int);
+        const startIndex = (currentPage - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        setDeckCard(sortedDeck.slice(startIndex, endIndex));
+      } else{
+        setDeckCard([]);
       }
-    } catch (err) {
-      console.error("Request failed:", err?.response?.data || err.message);
-    }
-  };
-  useEffect(() => {
-    postDetailCategory();
-  },[]) 
-  
-  useEffect(() => {
-    localStorage.setItem('category', categoryName)
-  }, [categoryName])
-
-  useEffect(()=> {
-    localStorage.setItem('category', 'ドラパルトex')
-  },[])
-
-  useEffect(() => {
-    // Process cards whenever they change
-    const grouped = cards.reduce((acc, card) => {
-      const category = card.category_int;
-      if (!acc[category]) {
-        acc[category] = [];
-      }
-      acc[category].push(card);
-      return acc;
-    }, {});
-
-    const sorted = Object.entries(grouped)
-      .sort(([a], [b]) => Number(a) - Number(b))
-      .map(([category, categoryCards]) => ({
-        category: groupNames[Number(category) - 1],
-        cards: categoryCards.sort((a, b) => a.name_var.localeCompare(b.name_var))
-      }));
-
-    setSortedCardsByCategory(sorted);
-  }, [cards]); // Re-run when cards change
-  const openStatus = useSelector(state => state.pokemon.open);
-
-  const cardCategoryOptions = useSelector((state) => state.cardCategory.cardCategories);
-  const leagueOptions = useSelector((state) => state.cardCategory.leagueOptions);
-  // This have to be removed
-
-
-  useEffect(() => {
-    dispatch(fetchCardCategories());
-  }, [dispatch]);
-
-  const [loading, setLoading] = useState(false);
-
-
-  useEffect(() => {
-    const fetchCards = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}/api/cards`,
-          filterObj,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-        dispatch(setCards(response.data));
-      } catch (error) {
-        console.error('Error fetching cards:', error);
-      } finally {
-        setLoading(false);
-      }
+      setTotalDeckCardLength(totalDeckCard.length);
+    }, [totalDeckCard, currentPage, pageSize]);
+    const handlePaginationChange = (page, pageSize) => {
+        setCurrentPage(page);
+        setPageSize(pageSize);
+        dispatch(fetchDeckCard({ page: currentPage, pageSize: 12, filterObj }));
     };
-
-    fetchCards();
-
-    //================
-
-    if(categoryName){
-      postDetailCategory(categoryName);
-    }
-
-    //================
-
-  }, [fetchStatus, dispatch]);
-
-  useEffect(() => {
-
-  }, [])
-
+  const handleCancel = () => {
+    dispatch(setOpenDeckSearch(!openDeck));
+  }
   const handleFetchCards = () => {
     setFetchStatus((prev) => !prev);
-    dispatch(setOpenSearch(!openStatus));
+    console.log(filterObj, "filterObj");
+    dispatch(fetchDeckCard({ page: currentPage, pageSize: 12, filterObj }));   // Just for the first render
+    dispatch(setOpenDeckSearch(!openDeck));
   }
 
   const onStartDateChange = (date, dateString) => {
@@ -169,91 +102,115 @@ const DeckCardPage = () => {
     setCategoryName(value)
   }
 
-
-  const handleCancel = () => {
-    dispatch(setOpenSearch(!openStatus));
-  }
-
-  return (
-    <>
-      <section className={styles.wrapper}>
-      </section>
-      <section className={styles.wrapper}>
-        {loading ? (
-          <p key="loading">Loading...</p>
-        ) : (
-          <>
-            {sortedCardsByCategory.length > 0 && sortedCardsByCategory.map(({ category, cards }, index) => (
-              <Row
-                gutter={{ xs: 24.5, sm: 24.5, md: 29, lg: 29 }} // horizontal gutter
-                vertical={true}
-              >
-                <div key={category}>
-                  <h2 key={index}>{category}</h2>
-                  <div className={styles.cardContainer}>
-                    {cards.map((card, index) => (
-                      <PokemonCard data={card} />
+    return(
+        <div className={styles.wrapper}>
+            {status === 'succeeded' && (
+                <div className={styles.deckCardWrapper2}>
+                    {deckCard.map((card) => (
+                        <a
+                            key={card.deck_ID_var} 
+                            className={styles.deckCard} 
+                            // href={`${window.location.href}/${card.event_holding_id}`}
+                              onClick={() => {
+                                  window.open(`https://www.pokemon-card.com/deck/deckView.php?deckID=${card.deck_ID_var}`, '_blank');
+                              }
+                            }
+                            // href={`https://www.pokemon-card.com/deck/deckView.php?deckID=${card.deck_ID_var}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <div className= {styles.order} style={{display : "flex", justifyContent : "space-between", alignItems:"center", width : "100%", paddingInline:"10px"}}>
+                                <p style={{paddingTop:"15px"}}>{card.rank_int === 1 ? "優勝" : card.rank_int === 2 ? "準優勝" : card.rank_int === 3 ? `ベスト${card.rank_int + 1}` : 
+                                card.rank_int === 5 ? `ベスト${card.rank_int + 3}` : `ベスト${card.rank_int + 7}`}</p>
+                                <a href={`https://www.pokemon-card.com/deck/deck.html?${card.deck_ID_var}`}><ExternalLink size={20} color="black" /></a>
+                            </div>
+                            <picture>
+                                <source srcSet={`https://www.pokemon-card.com/deck/deckView.php/deckID/${card.deck_ID_var}.webp`} type="image/webp" />
+                                <img src={`https://www.pokemon-card.com/deck/deckView.php/deckID/${card.deck_ID_var}.png`} alt="deck_ID_var's image" />
+                            </picture>
+                            <p>{dayjs(card.deck_date_date).format('YYYY年MM月DD日')} {card.deck_place_var}</p>
+                            <span>{card.place_var} </span>
+                        </a>
                     ))}
-                  </div>
                 </div>
-              </Row>
-            ))}
-            {
-              sortedCardsByCategory.length == 0 && <div>
-                カテゴリに該当するデッキがありません。
-              </div>
+            )}
+            {totalDeckCardLength !== 0 &&
+              <Pagination
+                  current={currentPage}
+                  total={totalDeckCardLength} // Make sure you have this value from your data
+                  pageSize={pageSize}
+                  onChange={handlePaginationChange}
+                  showSizeChanger={{
+                      locale: {
+                          items_per_page: '/ ページ'
+                      }
+                  }}
+                  showTotal={(total) => `合計 ${total} イベント`}
+                  showQuickJumper={{
+                      goButton: <span>移動</span>,
+                      input: {
+                          deckholder: 'ページ番号を入力'
+                      }
+                  }}
+                  pageSizeOptions={pageSizeOptions}
+                  locale={{ items_per_page: "/ ページ", jump_to: "ページに移動", jump_to_confirm: "確認", page: "ページ", prev_page: "前のページ", next_page: "次のページ", prev_5: "前の5ページ", next_5: "次の5ページ", prev_3: "前の3ページ", next_3: "次の3ページ", page_size: "ページサイズ",}}
+              />
             }
-          </>
-        )}
+              
+          <Modal
+            open={openDeck}
+            onCancel={handleCancel}
+            onOk={handleFetchCards}
+            okText="検索"
+            cancelText="キャンセル"
+            title="検索条件"
+          >
+            <Flex justify='space-evenly' align='center' style={{ marginBottom: '10px', paddingTop: '20px' }}>
+              <label>開催日</label>
+              <DatePicker
+                value={dayjs(filterObj.startDate)}
+                onChange={onStartDateChange}
+                allowClear={false}
+                locale={locale}
+              />
+            </Flex>
+            <Flex justify='space-evenly' align='center' style={{ marginBottom: '10px' }}>
+              <label>終了日</label>
+              <DatePicker
+                value={dayjs(filterObj.endDate)}
+                onChange={onEndDateChange}
+                allowClear={false}
+                locale={locale}
+              />
+            </Flex>
 
-      <Modal
-        open={openStatus}
-        onCancel={handleCancel}
-        onOk={handleFetchCards}
-        okText="検索"
-        cancelText="キャンセル"
-        title="検索条件"
-      >
-        <Flex justify='space-evenly' align='center' style={{ marginBottom: '10px', paddingTop: '20px' }}>
-          <label>開催日</label>
-          <DatePicker
-            value={startDate}
-            onChange={setStartDate}
-            allowClear={false}
-            locale={locale}
-          />
-        </Flex>
-        <Flex justify='space-evenly' align='center' style={{ marginBottom: '10px' }}>
-          <label>終了日</label>
-          <DatePicker
-            value={endDate}
-            onChange={setEndDate}
-            allowClear={false}
-            locale={locale}
-          />
-        </Flex>
-        <Flex justify='space-evenly' align='center' style={{ marginBottom: '10px' }}>
-          <label>&nbsp; リーグ &nbsp;</label>
-          <Select
-            defaultValue={league}
-            options={leagueOptions}
-            onChange={setLeague}
-            style={{ width: 200 }}
-          />
-        </Flex>
-        <Flex justify='space-evenly' align='center' style={{ marginBottom: '20px', paddingBottom: '20px' }}>
-          <label>カテゴリ</label>
-          <Select
-            defaultValue={category}
-            onChange={setCategory}
-            style={{ width: 200 }}
-            options={cardCategoryOptions}
-          />
-        </Flex>
-      </Modal>
-      </section>
-    </>
-  );
-};
+            <Flex justify='space-evenly' align='center' style={{ marginBottom: '10px' }}>
+              <label>&nbsp; リーグ &nbsp;</label>
+              <Select
+                defaultValue={leagueOptions[0]?.value || 2}
+                options={leagueOptions}
+                onChange={onLeagueChange}
+                style={{
+                  width: 200,
+                }}
+              />
+            </Flex>
 
-export default DeckCardPage; 
+            <Flex justify='space-evenly' align='center' style={{ marginBottom: '20px', paddingBottom: '20px' }}>
+              <label>カテゴリ</label>
+              <Select
+                defaultValue={cardCategoryOptions[0]?.value || "ドラパルトex"}
+                onChange={cardCategoryChange}
+                style={{
+                  width: 250,
+                }}
+                options={cardCategoryOptions}
+              />
+            </Flex>
+            
+          </Modal>
+        </div>
+    )
+}
+
+export default DeckCardPage;

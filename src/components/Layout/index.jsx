@@ -7,7 +7,7 @@ import {
   LogoutOutlined
 } from '@ant-design/icons';
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { CgPokemon, CgCalendar, CgUserList, CgData, CgCamera } from "react-icons/cg";
+import { CgPokemon, CgCalendar, CgUserList, CgData, CgCamera, CgDesktop } from "react-icons/cg";
 import { LiaSearchSolid } from "react-icons/lia";
 import { BsBuilding } from "react-icons/bs";
 import { Layout, Menu, theme, Grid, Button } from 'antd';
@@ -15,6 +15,7 @@ import { UnorderedListOutlined } from '@ant-design/icons';
 import styles from './index.module.scss';
 import { UpOutlined } from '@ant-design/icons';
 import { setOpenSearch, selectOpenSearch, selectDeckCount, selectEventCount, selectSpecificDeckCount, selectConditions } from '../../store/slices/pokemonSlice';
+import { setOpenDeckSearch, selectOpenDeck } from '../../store/slices/deckCardSlice';
 import { selectCardCategory } from '../../store/slices/cardCategorySlice';
 import axios from 'axios';
 
@@ -28,6 +29,7 @@ const LayoutSide = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [sidebarPresentStatus, setSidebarPresentStatus] = useState(false);
   const openStatus = useSelector(selectOpenSearch);
+  const openDeck = useSelector(selectOpenDeck);
   const deckCount = useSelector(selectDeckCount);
   const eventCount = useSelector(selectEventCount);
   const specificDeckCount = useSelector(selectSpecificDeckCount);
@@ -49,7 +51,7 @@ const LayoutSide = () => {
   }
   
   const changeDeckModalStatus = () => {
-    dispatch(setOpenSearch(!openStatus));
+    dispatch(setOpenDeckSearch(!openDeck));
   }
   const handleLogin = () => {
     if (token) {
@@ -103,9 +105,9 @@ const LayoutSide = () => {
               <LiaSearchSolid style={{ width: '120%', height: '120%' }} />
             </div>}
             {window.location.pathname.includes('deckshow') &&
-            <div style={{ marginRight: '17px', width: '60px', height: '30px', display:'flex' }} onClick={changeDeckModalStatus}>
-              <div style={{fontSize:"12px"}}>条件検索</div>
-              <LiaSearchSolid style={{ width: '120%', height: '120%' }} />
+            <div style={{ marginRight: '17px', width: '70px', height: '30px', display:'flex' }} onClick={changeDeckModalStatus}>
+              <div style={{fontSize:"12px", width:'120px'}}>デッキ検索</div>
+              <LiaSearchSolid style={{ width: '150%', height: '120%' }} />
             </div>}
           <div className="searchText" style={{ alignItems: "center", fontSize: "20px" }}></div>
             <div className="loginBtn" style={{ backgroundColor: "whitesmoke", padding: "5px", borderRadius: "10px" }}>
@@ -162,7 +164,13 @@ const LayoutSide = () => {
               {
                 key: '5',
                 icon: <CgData />,
-                label: <NavLink to="/category">カテゴリ</NavLink>,
+                label: <NavLink to="/category">カテゴリ管理</NavLink>,
+              },
+              (token) &&
+              {
+                key: '7',
+                icon: <CgDesktop />,
+                label: <NavLink to="/cardcategory">カードを追加</NavLink>,
               },
             ]}
             className={`${styles.menuTag}`}
@@ -182,7 +190,7 @@ const LayoutSide = () => {
               }}
               className={`${responsive ? styles.none : styles.show}`}
             />
-            {!window.location.pathname.includes('placeshow') && !window.location.pathname.includes('dateshow') && !window.location.pathname.includes('users') && !window.location.pathname.includes('category') && (
+            {!window.location.pathname.includes('placeshow') && !window.location.pathname.includes('dateshow') && !window.location.pathname.includes('users') && !window.location.pathname.includes('category') && !window.location.pathname.includes('deckshow') &&  (
               <span className={styles.headerText}>{eventCount} イベント / {deckCount} デッキ中 /対象<span style={{ color: '#008000', fontWeight: 'bold' }}>{specificDeckCount}</span> デッキ</span>
             )}
             {/* Scroll to top button */}
@@ -206,7 +214,7 @@ const LayoutSide = () => {
               Top
             </Button>
           </Header>
-          {!window.location.pathname.includes('placeshow') && !window.location.pathname.includes('dateshow') && !window.location.pathname.includes('users') && !window.location.pathname.includes('category') && (
+          {!window.location.pathname.includes('placeshow') && !window.location.pathname.includes('dateshow') && !window.location.pathname.includes('users') && !window.location.pathname.includes('category') && !window.location.pathname.includes('deckshow') && (
           <div>{
             condsObj ? <>
               {

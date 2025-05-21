@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './CategoryPage.scss';
 import { Button, Table, Form, Container, Row, Col, Modal, Spinner, ToastContainer } from 'react-bootstrap';
 import axios from 'axios'; // Importing axios
@@ -16,11 +16,28 @@ function Category() {
     const [formLoading, setFormLoading] = useState(false); // Loading state for form submission
     const [showCreateModal, setShowCreateModal] = useState(false); // For showing Create Modal
     const [showEditModal, setShowEditModal] = useState(false); // For showing Edit Modal
+    const [cardNames, setCardNames] = useState([]); // For card names
+    // const cardNames = [
+    //     'オーダイル', 'ブースターex', 'ミロカロスex', 'ヤドキング', 'ピカチュウex','リザードンex', 'テラパゴスex', 'ダイゴのメタグロスex', 'マリィのオーロンゲex', 'ドラパルトex', 'サーフゴーex', 'ソウブレイズex', 'ブリジュラスex', 'サーナイトex', 'タケルライコex', 'Nのゾロアークex', 'ホップのザシアンex','メガヤンマex', 'イワパレス', 'ヒビキのバクフーン', 'ヒビキのホウオウex', 'シロナのガブリアスex', 'グレンアルマ', 'テラスタルバレット', 'ナンジャモのハラバリーex', 'ヨノワール', 'オーガポン みどりのめんex', 'モモワロウ', 'ユキメノコ', 'ミライドン','カミッチュ','お祭り会場','シロナのロズレイド','ノココッチ','ホップのバイウールー', '基本炎エネルギー', '基本雷エネルギー', '基本草エネルギー', '基本水エネルギー', '基本超エネルギー', '基本闘エネルギー', '基本悪エネルギー', '基本鋼エネルギー'
+    // ];
 
-    const cardNames = [
-        'オーダイル', 'ブースターex', 'ミロカロスex', 'ヤドキング', 'ピカチュウex','リザードンex', 'テラパゴスex', 'ダイゴのメタグロスex', 'マリィのオーロンゲex', 'ドラパルトex', 'サーフゴーex', 'ソウブレイズex', 'ブリジュラスex', 'サーナイトex', 'タケルライコex', 'Nのゾロアークex', 'ホップのザシアンex','メガヤンマex', 'イワパレス', 'ヒビキのバクフーン', 'ヒビキのホウオウex', 'シロナのガブリアスex', 'グレンアルマ', 'テラスタルバレット', 'ナンジャモのハラバリーex', 'ヨノワール', 'オーガポン みどりのめんex', 'モモワロウ', 'ユキメノコ', 'ミライドン','カミッチュ','お祭り会場','シロナのロズレイド','ノココッチ','ホップのバイウールー', '基本炎エネルギー', '基本雷エネルギー', '基本草エネルギー', '基本水エネルギー', '基本超エネルギー', '基本闘エネルギー', '基本悪エネルギー', '基本鋼エネルギー'
-    ];
-
+    const cardRead = () => {
+        setLoading(true); // Start loading
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/card_detail/read`) // Replace with your API endpoint
+            .then(response => {
+                console.log("get", response.data);
+                setCardNames(response.data);
+                console.log("get-------", cardNames);
+                setLoading(false); // Stop loading after data is fetched
+            })
+            .catch(error => {
+                console.error('Error fetching cards:', error);
+                setLoading(false); // Stop loading even on error
+            });
+    };
+    useEffect(() => {
+        cardRead();
+    }, []);
     const read = () => {
         setLoading(true);
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/getCategory`)
@@ -220,7 +237,7 @@ function Category() {
                                     >
                                         <option value="">カード名を選択</option>
                                         {cardNames.map((cardName, i) => (
-                                            <option key={i} value={cardName}>{cardName}</option>
+                                            <option key={i} value={cardName.name}>{cardName.name}</option>
                                         ))}
                                     </Form.Control>
                                 </Form.Group>
@@ -298,7 +315,7 @@ function Category() {
                                     >
                                         <option value="">カード名を選択</option>
                                         {cardNames.map((cardName, i) => (
-                                            <option key={i} value={cardName}>{cardName}</option>
+                                            <option key={i} value={cardName.name}>{cardName.name}</option>
                                         ))}
                                     </Form.Control>
                                 </Form.Group>
