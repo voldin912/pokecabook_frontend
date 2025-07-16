@@ -22,6 +22,7 @@ export const fetchCardCategories = createAsyncThunk(
 
 const initialState = {
   cardCategories: [],
+  cardCategories2: [],
   leagueOptions: [{
     value: 2,
     label: "オープン"

@@ -237,7 +237,18 @@ const CardUsageRate = () => {
           </Flex>
 
           <Flex justify='space-evenly' align='center' style={{ marginBottom: '20px', paddingBottom: '20px' }}>
-            <label>カテゴリ</label>
+            <label>カテゴリ(1)</label>
+            <Select
+              defaultValue={cardCategoryOptions[0]?.value || "ドラパルトex"}
+              onChange={cardCategoryChange}
+              style={{
+                width: 250,
+              }}
+              options={cardCategoryOptions}
+            />
+          </Flex>
+          <Flex justify='space-evenly' align='center' style={{ marginBottom: '20px', paddingBottom: '20px' }}>
+            <label>カテゴリ(2)</label>
             <Select
               defaultValue={cardCategoryOptions[0]?.value || "ドラパルトex"}
               onChange={cardCategoryChange}
