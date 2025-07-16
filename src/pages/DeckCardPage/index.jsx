@@ -31,6 +31,8 @@ const DeckCardPage = () => {
       league: 2
     });
     const cardCategoryOptions = useSelector((state) => state.cardCategory.cardCategories);
+    const cardCategoryOptions_1 = useSelector((state) => state.cardCategory.cardCategories_1);
+    const cardCategoryOptions_2 = useSelector((state) => state.cardCategory.cardCategories_2);
     const leagueOptions = useSelector((state) => state.cardCategory.leagueOptions);
     
     useEffect(() => {
@@ -97,7 +99,7 @@ const DeckCardPage = () => {
     console.log(value, "value");
     setFilterObj({
       ...filterObj,
-      category: value,
+      category: cardCategoryOptions.find(item => item.id === value.id)?.value,
     });
     setCategoryName(value)
   }
@@ -197,14 +199,24 @@ const DeckCardPage = () => {
             </Flex>
 
             <Flex justify='space-evenly' align='center' style={{ marginBottom: '20px', paddingBottom: '20px' }}>
-              <label>カテゴリ</label>
+              <label>カテゴリ(1)</label>
               <Select
                 defaultValue={cardCategoryOptions[0]?.value || "ドラパルトex"}
                 onChange={cardCategoryChange}
                 style={{
                   width: 250,
                 }}
-                options={cardCategoryOptions}
+                options={cardCategoryOptions_1}
+              />
+            </Flex><Flex justify='space-evenly' align='center' style={{ marginBottom: '20px', paddingBottom: '20px' }}>
+              <label>カテゴリ(2)</label>
+              <Select
+                defaultValue={cardCategoryOptions[0]?.value || "ドラパルトex"}
+                onChange={cardCategoryChange}
+                style={{
+                  width: 250,
+                }}
+                options={cardCategoryOptions_2.filter(item => item.index === cardCategoryOptions_1.findIndex(cat => cat.value === categoryName))}
               />
             </Flex>
             
