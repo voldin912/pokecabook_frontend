@@ -26,7 +26,8 @@ const CardCategoryPage = () => {
     // Fetch cards
     const read = () => {
         setLoading(true); // Start loading
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/card_detail/read`) // Replace with your API endpoint
+        axios.get(`https://playpokecabook.com/api/card_detail/read`) // Replace with your API endpoint
+        // `${process.env.REACT_APP_BACKEND_URL}/api/card_detail/read`
             .then(response => {
                 console.log("get", response.data);
                 setCards(response.data);
@@ -54,7 +55,8 @@ const CardCategoryPage = () => {
     // Delete card
     const getAllData = () => {
         setLoading(true); // Start loading
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/card_detail/read`) // Replace with your API endpoint
+        axios.get(`https://playpokecabook.com/api/card_detail/read`) // Replace with your API endpoint
+        // `${process.env.REACT_APP_BACKEND_URL}/api/card_detail/read`
             .then(response => {
                 console.log("get", response.data);
                 setCards(response.data);
@@ -70,7 +72,8 @@ const CardCategoryPage = () => {
         if (window.confirm("本当にこのユーザーを削除しますか？")) {
             console.log(card, "id");
 
-            await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/card_detail/remove/${card}`) // Replace with your API endpoint
+            await axios.delete(`https://playpokecabook.com/api/card_detail/remove/${card}`) // Replace with your API endpoint
+            // `${process.env.REACT_APP_BACKEND_URL}/api/card_detail/remove/${card}`
                 .then(() => {
                     setCards(cards.filter(card => card.id !== card));
                     toast.success('ユーザーが削除されました');
@@ -97,7 +100,8 @@ const CardCategoryPage = () => {
             name: newName
         };
 
-        axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/card_detail/update/${selectedCard.id}`, updatedCard) // Replace with your API endpoint
+        axios.put(`https://playpokecabook.com/api/card_detail/update/${selectedCard.id}`, updatedCard) // Replace with your API endpoint
+        // `${process.env.REACT_APP_BACKEND_URL}/api/card_detail/update/${selectedCard.id}`
             .then(response => {
                 setCards(cards.map(card => card.id === selectedCard.id ? response.data : card));
                 setShowModal(false);
@@ -115,7 +119,8 @@ const CardCategoryPage = () => {
         const newCard = {
             name: newName
         };
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/card_detail/create`, newCard) // Replace with your API endpoint
+        axios.post(`https://playpokecabook.com/api/card_detail/create`, newCard) // Replace with your API endpoint
+        // `${process.env.REACT_APP_BACKEND_URL}/api/card_detail/create`
             .then(response => {
                 setCards([...cards, response.data]);
                 setShowModal(false);

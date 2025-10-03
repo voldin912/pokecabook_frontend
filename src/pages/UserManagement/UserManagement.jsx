@@ -25,7 +25,8 @@ const UserManagementPage = () => {
     // Fetch users
     const read = () => {
         setLoading(true); // Start loading
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/read`) // Replace with your API endpoint
+        axios.get(`https://playpokecabook.com/api/read`) // Replace with your API endpoint
+        // `${process.env.REACT_APP_BACKEND_URL}/api/read`
             .then(response => {
                 setUsers(response.data);
                 console.log("get", response);
@@ -49,7 +50,8 @@ const UserManagementPage = () => {
     // Delete user
     const getAllData = () => {
         setLoading(true); // Start loading
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/read`) // Replace with your API endpoint
+        axios.get(`https://playpokecabook.com/api/read`) // Replace with your API endpoint
+        // `${process.env.REACT_APP_BACKEND_URL}/api/read`
             .then(response => {
                 setUsers(response.data);
                 setLoading(false); // Stop loading after data is fetched
@@ -64,7 +66,8 @@ const UserManagementPage = () => {
         if (window.confirm("本当にこのユーザーを削除しますか？")) {
             console.log(user, "userID");
 
-            await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/remove/${user}`) // Replace with your API endpoint
+            await axios.delete(`https://playpokecabook.com/api/remove/${user}`) // Replace with your API endpoint
+            // `${process.env.REACT_APP_BACKEND_URL}/api/remove/${user}`
                 .then(() => {
                     setUsers(users.filter(user => user.userID !== user));
                     toast.success('ユーザーが削除されました');
@@ -84,7 +87,8 @@ const UserManagementPage = () => {
             email: newEmail
         };
 
-        axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/update/${selectedUser.userID}`, updatedUser) // Replace with your API endpoint
+        axios.put(`https://playpokecabook.com/api/update/${selectedUser.userID}`, updatedUser) // Replace with your API endpoint
+        // `${process.env.REACT_APP_BACKEND_URL}/api/update/${selectedUser.userID}`
             .then(response => {
                 setUsers(users.map(user => user.userID === selectedUser.userID ? response.data : user));
                 setShowModal(false);
@@ -104,7 +108,8 @@ const UserManagementPage = () => {
             email: newEmail,
             password: newPassword // Send password in the request
         };
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/create`, newUser) // Replace with your API endpoint
+        axios.post(`https://playpokecabook.com/api/create`, newUser) // Replace with your API endpoint
+        // `${process.env.REACT_APP_BACKEND_URL}/api/create`
             .then(response => {
                 setUsers([...users, response.data]);
                 setShowCreateModal(false);

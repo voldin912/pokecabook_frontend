@@ -23,7 +23,8 @@ function Category() {
 
     const cardRead = () => {
         setLoading(true); // Start loading
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/card_detail/read`) // Replace with your API endpoint
+        axios.get(`https://playpokecabook.com/api/card_detail/read`) // Replace with your API endpoint
+        // `${process.env.REACT_APP_BACKEND_URL}/api/card_detail/read`
             .then(response => {
                 console.log("get", response.data);
                 setCardNames(response.data);
@@ -40,7 +41,8 @@ function Category() {
     }, []);
     const read = () => {
         setLoading(true);
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/getCategory`)
+        axios.get(`https://playpokecabook.com/api/getCategory`)
+        // `${process.env.REACT_APP_BACKEND_URL}/api/getCategory`
             .then((response) => {
                 setCategories(response.data);
                 setLoading(false);
@@ -59,7 +61,8 @@ function Category() {
         if (editIndex !== null) {
             // Handle Edit (Update)
             try {
-                const response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/updateCategory/${editIndex}`, newCategory);
+                const response = await axios.put(`https://playpokecabook.com/api/updateCategory/${editIndex}`, newCategory);
+                // `${process.env.REACT_APP_BACKEND_URL}/api/updateCategory/${editIndex}`
                 const updatedCategories = [...categories];
                 updatedCategories[editIndex] = response.data;
                 setCategories(updatedCategories);
@@ -72,7 +75,8 @@ function Category() {
         } else {
             // Handle Create (Add)
             try {
-                const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/createCategory`, newCategory);
+                const response = await axios.post(`https://playpokecabook.com/api/createCategory`, newCategory);
+                // `${process.env.REACT_APP_BACKEND_URL}/api/createCategory`
                 setCategories([...categories, response.data]);
                 resetForm();
                 setShowCreateModal(false);
@@ -95,7 +99,8 @@ function Category() {
 
     const handleDelete = (categoryId) => {
         if (window.confirm("本当にこのユーザーを削除しますか？")) {
-            axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/deleteCategory/${categoryId}`)
+            axios.delete(`https://playpokecabook.com/api/deleteCategory/${categoryId}`)
+            // `${process.env.REACT_APP_BACKEND_URL}/api/deleteCategory/${categoryId}`
                 .then(() => {
                     const updatedCategories = categories.filter((category) => category.id !== categoryId);
                     setCategories(updatedCategories);
@@ -134,7 +139,8 @@ function Category() {
     }, []);
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/getCategory`)
+        axios.get(`https://playpokecabook.com/api/getCategory`)
+        // `${process.env.REACT_APP_BACKEND_URL}/api/getCategory`
             .then((response) => {
                 setCategories(response.data);
             })

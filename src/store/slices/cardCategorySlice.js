@@ -5,7 +5,9 @@ export const fetchCardCategories = createAsyncThunk(
   'cardCategory/fetchCardCategories',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/card-category`);
+      const response = await axios.get(`https://playpokecabook.com/api/card-category`);
+      // const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/card-category`);
+      
       const transformedData = response.data.map(item => ({
         id: item.id,
         conds: item.conds,
@@ -50,12 +52,12 @@ const analyzeAndSplitCategories = (categories) => {
   categories.forEach(item => {
     const categoryName = item.value;
     
-    if (categoryName.includes('(')) {
+    if (categoryName.includes('（')) {
       // Extract the base name (before the first parenthesis)
-      const baseName = categoryName.substring(0, categoryName.indexOf('('));
+      const baseName = categoryName.substring(0, categoryName.indexOf('（'));
       
       // Remove parentheses and spaces for the variant name
-      const variantName = categoryName.replace(/[()]/g, '').replace(/\s+/g, '');
+      const variantName = categoryName.replace(/[（）]/g, '').replace(/\s+/g, '');
       
       // Find or add base name to cardCategories_1
       let baseCategoryIndex = cardCategories_1.findIndex(cat => cat.value === baseName);
@@ -74,7 +76,7 @@ const analyzeAndSplitCategories = (categories) => {
       cardCategories_2.push({
         id: item.id,
         conds: item.conds,
-        value: variantName,
+        value: categoryName,
         label: variantName,
         originalValue: categoryName,
         index: baseCategoryIndex      // Index of corresponding item in cardCategories_1
@@ -116,10 +118,6 @@ export const cardCategorySlice = createSlice({
         const { cardCategories_1, cardCategories_2 } = analyzeAndSplitCategories(action.payload);
         state.cardCategories_1 = cardCategories_1;
         state.cardCategories_2 = cardCategories_2;
-        
-        console.log("state.cardCategories==>", state.cardCategories);
-        console.log("state.cardCategories_1==>", state.cardCategories_1);
-        console.log("state.cardCategories_2==>", state.cardCategories_2);
       })
       .addCase(fetchCardCategories.rejected, (state, action) => {
         state.loading = false;

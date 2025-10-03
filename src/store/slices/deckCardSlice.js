@@ -6,11 +6,13 @@ export const fetchDeckCard = createAsyncThunk(
   async ({ page, pageSize, filterObj }, { rejectWithValue }) => {
     console.log(page, pageSize, filterObj, "filterObj");
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/decks`, {
+      const response = await axios.post(`https://playpokecabook.com/api/decks`, {
+        // const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/decks`, {
         page: page,
         pageSize: pageSize,
         filter: filterObj
       });
+      console.log("response data",response.data)
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || 'Failed to fetch place card');
@@ -22,10 +24,25 @@ export const fetchTotalDeckCardLength = createAsyncThunk(
   'deckCard/fetchTotalDeckCardLength',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/decks/total`);
+      const response = await axios.get(`https://playpokecabook.com/api/decks/total`);
+      // const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/decks/total`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || 'Failed to fetch total place card length');
+    }
+  }
+);
+
+export const fetchDeckStats = createAsyncThunk(
+  'deckCard/fetchDeckStats',
+  async (filterObj, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`https://playpokecabook.com/api/decks/stats`, {
+        filter: filterObj
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message || 'Failed to fetch deck stats');
     }
   }
 );
@@ -34,7 +51,12 @@ const initialState = {
   deckCard: [],
   status: 'idle',
   error: null,
-  totalDeckCardLength: 0
+  totalDeckCardLength: 0,
+  deckStats: {
+    eventCount: 0,
+    totalDeckCount: 0,
+    filteredDeckCount: 0
+  }
 };
 
 const deckCardSlice = createSlice({
@@ -60,6 +82,9 @@ const deckCardSlice = createSlice({
       })
       .addCase(fetchTotalDeckCardLength.fulfilled, (state, action) => {
         state.totalDeckCardLength = action.payload;
+      })
+      .addCase(fetchDeckStats.fulfilled, (state, action) => {
+        state.deckStats = action.payload;
       });
      
   }
@@ -71,6 +96,7 @@ export const selectDeckCard = (state) => state.deckCard.deckCard;
 export const selectStatus = (state) => state.deckCard.status;
 export const selectError = (state) => state.deckCard.error;
 export const selectTotalDeckCardLength = (state) => state.deckCard.totalDeckCardLength;
+export const selectDeckStats = (state) => state.deckCard.deckStats;
 
 export const selectOpenDeck = (state) => state.deckCard.openDeck; 
 

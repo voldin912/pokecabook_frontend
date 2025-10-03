@@ -5,7 +5,8 @@ export const fetchPlaceCard = createAsyncThunk(
   'placeCard/fetchPlaceCard',
   async ({ page, pageSize }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/place-card`, {
+      const response = await axios.post(`https://playpokecabook.com/api/place-card`, {
+        // const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/place-card`, {
         page: page,
         pageSize: pageSize
       });
@@ -20,7 +21,8 @@ export const fetchTotalPlaceCardLength = createAsyncThunk(
   'placeCard/fetchTotalPlaceCardLength',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/place-card/total`);
+      const response = await axios.get(`https://playpokecabook.com/api/place-card/total`);
+      // const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/place-card/total`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || 'Failed to fetch total place card length');
