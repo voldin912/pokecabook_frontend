@@ -26,7 +26,8 @@ const PokemonAuth = () => {
         if(!input.name, !input.email, !input.password){
             toast.error('データを正確に入力してください');
         }
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/login`, input) // Replace with your API endpoint
+        axios.post(`https://playpokecabook.com/api/login`, input) // Replace with your API endpoint
+        // `${process.env.REACT_APP_BACKEND_URL}/api/login`
             .then(response => {
                 toast.success(response.data.msg);
                 localStorage.setItem("token", response.data.token);

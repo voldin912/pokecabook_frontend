@@ -14,7 +14,8 @@ const PlaceCardUsageDetail = () => {
     useEffect(() => {
         const fetchPlaceCard = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/place-card/${event_holding_id}`);
+                const response = await axios.get(`https://playpokecabook.com/api/place-card/${event_holding_id}`);
+        // `${process.env.REACT_APP_BACKEND_URL}/api/place-card/${event_holding_id}`
                 setPlaceCard(response.data);
             } catch (error) {
                 console.error("Error fetching place card:", error);

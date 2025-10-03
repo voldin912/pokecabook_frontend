@@ -5,7 +5,8 @@ export const fetchDayCard = createAsyncThunk(
   'dayCard/fetchDayCard',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/day-card`);
+      const response = await axios.get(`https://playpokecabook.com/api/day-card`);
+      // const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/day-card`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message || 'Failed to fetch day card');

@@ -202,7 +202,7 @@ const LayoutSide = () => {
                 position: "fixed",
                 bottom: "20px",
                 left: "7px",
-                index: "1000",
+                index: "1000",  
                 zIndex: '5',
                 width: "60px",
                 backgroundColor: "dodgerblue",
